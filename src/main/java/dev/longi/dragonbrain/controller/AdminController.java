@@ -1,8 +1,6 @@
 package dev.longi.dragonbrain.controller;
 
-import dev.longi.dragonbrain.entity.Photo;
 import dev.longi.dragonbrain.entity.Project;
-import dev.longi.dragonbrain.repository.PhotoRepository;
 import dev.longi.dragonbrain.service.ProjectService;
 import dev.longi.dragonbrain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +18,12 @@ public class AdminController {
 
     private final ProjectService projectService;
 
-    private final PhotoRepository photoRepository;
-
     private final UserService userService;
 
     @Autowired
-    public AdminController(ProjectService projectService, PhotoRepository photoRepository,
+    public AdminController(ProjectService projectService,
                            UserService userService) {
         this.projectService = projectService;
-        this.photoRepository = photoRepository;
         this.userService = userService;
     }
 
@@ -38,23 +33,10 @@ public class AdminController {
         return projectService.createProject(project);
     }
 
-    @PostMapping("/photos")
-    public Photo createPhoto(Principal principal, @RequestBody Photo photo) {
-        userService.checkPrincipal(principal);
-        photoRepository.save(photo);
-        return photo;
-    }
-
     @DeleteMapping("/projects/{id}")
     public void deleteProject(Principal principal, @PathVariable("id") Long id) {
         userService.checkPrincipal(principal);
         projectService.deleteProject(id);
-    }
-
-    @DeleteMapping("/photos/{id}")
-    public void deletePhoto(Principal principal, @PathVariable("id") Long id) {
-        userService.checkPrincipal(principal);
-        photoRepository.deleteById(id);
     }
 
     @PostMapping("/projects/{id}/move")
@@ -75,23 +57,4 @@ public class AdminController {
         return projectService.getProject(id);
     }
 
-    @PutMapping("/photos/{id}")
-    public Photo editProject(Principal principal, @PathVariable("id") Long id, @RequestBody Photo photo) {
-        userService.checkPrincipal(principal);
-        Photo original = photoRepository.getOne(id);
-
-        original.setDate(photo.getDate());
-        original.setDevice(photo.getDevice());
-        original.setThumbnail(photo.getThumbnail());
-        original.setTitle(photo.getTitle());
-        original.setPath(photo.getPath());
-
-        return photoRepository.save(original);
-    }
-
-    @GetMapping("/photos/{id}")
-    public Photo getPhoto(Principal principal, @PathVariable("id") Long id) {
-        userService.checkPrincipal(principal);
-        return photoRepository.getOne(id);
-    }
 }
