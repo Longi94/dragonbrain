@@ -9,6 +9,16 @@ group = 'dev.longi'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
+jar {
+    baseName = 'dragonbrain'
+    version = version
+    manifest {
+        attributes(
+                'Main-Class': 'dev.longi.dragonbrain.DragonBrainApplication'
+        )
+    }
+}
+
 repositories {
     mavenCentral()
 }
