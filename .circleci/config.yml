@@ -1,0 +1,55 @@
+version: 2.1
+
+jobs:
+  build:
+    working_directory: /tmp/dragonbrain
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gradle-{{ checksum "build.gradle" }}
+      - run: chmod +x gradlew
+      - run: ./gradlew assemble
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: gradle-{{ checksum "build.gradle" }}
+      - store_artifacts:
+          path: build/libs
+      - persist_to_workspace:
+          root: build
+          paths:
+            - libs
+  deploy:
+    working_directory: /tmp/dragonbrain
+    machine:
+      enabled: true
+    steps:
+      - attach_workspace:
+          at: /tmp/dragonbrain/build
+      - run:
+          name: Archive existing jars
+          command: ssh $SSH_USER@$SSH_HOST -p $SSH_PORT "echo $SSH_PASS | sudo -S mv $DRAGONBRAIN_HOME/*.jar $DRAGONBRAIN_HOME/archive/ || true"
+      - run:
+          name: Copy artifact to host
+          command: scp -P $SSH_PORT /tmp/dragonbrain/build/libs/*.jar "$SSH_USER@$SSH_HOST:/home/$SSH_USER/"
+      - run:
+          name: Copy artifact to deploy folder
+          command: ssh $SSH_USER@$SSH_HOST -p $SSH_PORT "echo $SSH_PASS | sudo -S mv ~/dragonbrain-*.jar $DRAGONBRAIN_HOME/"
+      - run:
+          name: Restart service
+          command: ssh $SSH_USER@$SSH_HOST -p $SSH_PORT "echo $SSH_PASS | sudo -S systemctl restart dragonbrain"
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
