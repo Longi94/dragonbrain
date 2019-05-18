@@ -4,5 +4,11 @@
       "name": "env",
       "type": "java.lang.String",
       "description": "Environment (prod or local)"
-  }
-] }
+    },
+    {
+      "name": "server.allowed-origins",
+      "type": "java.lang.String",
+      "description": "Allowed origins"
+    }
+  ]
+}
