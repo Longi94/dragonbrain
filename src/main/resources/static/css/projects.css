@@ -1,0 +1,22 @@
+#projects-div {
+    display: flex;
+    flex-flow: row wrap;
+    align-content: center;
+    justify-content: center;
+}
+
+#projects-div .mdc-card {
+    margin: 16px;
+    width: 240px;
+}
+
+#projects-div .mdc-card .mdc-card__media {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 160px;
+}
+
+#button-more {
+    margin-bottom: 20px;
+}
