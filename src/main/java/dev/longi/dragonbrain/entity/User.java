@@ -21,9 +21,6 @@ public class User {
     @Column(name = "hash", nullable = false)
     private String hash;
 
-    @Column(name = "root", nullable = false)
-    private Boolean root;
-
     public Long getId() {
         return id;
     }
@@ -46,13 +43,5 @@ public class User {
 
     public void setHash(String hash) {
         this.hash = hash;
-    }
-
-    public Boolean getRoot() {
-        return root;
-    }
-
-    public void setRoot(Boolean root) {
-        this.root = root;
     }
 }

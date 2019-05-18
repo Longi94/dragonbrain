@@ -10,8 +10,6 @@ public class UserDto {
 
     private String password;
 
-    private Boolean root = false;
-
     public String getUsername() {
         return username;
     }
@@ -26,13 +24,5 @@ public class UserDto {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Boolean getRoot() {
-        return root;
-    }
-
-    public void setRoot(Boolean root) {
-        this.root = root;
     }
 }
