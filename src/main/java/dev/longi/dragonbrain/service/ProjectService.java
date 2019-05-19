@@ -43,7 +43,7 @@ public class ProjectService {
         Project project = projectRepository.getOne(id);
 
         if (project == null) {
-            throw new NotFoundException();
+            throw new NotFoundException("Project not found");
         }
 
         Project other = up ?
@@ -51,7 +51,7 @@ public class ProjectService {
                 projectRepository.getNext(project.getOrderBy());
 
         if (other == null) {
-            throw new BadRequestException();
+            throw new BadRequestException("Cannot move project");
         }
 
         int temp = project.getOrderBy();

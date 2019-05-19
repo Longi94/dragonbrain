@@ -28,7 +28,7 @@ public class AuthController {
     @ResponseStatus(value = HttpStatus.OK)
     public void auth(@ModelAttribute UserDto user) {
         if (!this.authService.authenticate(user.getUsername(), user.getPassword())) {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException("Invalid credentials");
         }
     }
 }
